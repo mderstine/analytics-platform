@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  analytics_platform:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./projects:/app/projects
+    environment:
+      - DAGSTER_HOME=/app/dagster_home
+
+  postgres:
+    image: postgres:15
+    container_name: dagster_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: dagster
+      POSTGRES_PASSWORD: dagster
+      POSTGRES_DB: dagster
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - dagster_network
+
+  portfolio_management:
+    build:
+      context: ./projects/portfolio-management
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./projects/portfolio-management:/app
+    environment:
+      - DAGSTER_HOME=/app/dagster_home
+
+volumes:
+  postgres_data:
+
+networks:
+  dagster_network:
+    driver: bridge
