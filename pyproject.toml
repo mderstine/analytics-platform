@@ -1,0 +1,29 @@
+[project]
+name = "analytics_platform"
+requires-python = ">=3.9,<3.13"
+version = "0.1.0"
+dependencies = [
+    "dagster",
+]
+
+[project.entry-points]
+"dagster_dg.plugin" = { analytics_platform = "analytics_platform.lib"}
+
+[dependency-groups]
+dev = [
+    "dagster-webserver",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.dg]
+directory_type = "project"
+
+[tool.dg.project]
+root_module = "analytics_platform"
+
+
+[tool.dg.project.python_environment]
+active = true
